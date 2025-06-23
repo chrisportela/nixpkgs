@@ -7,6 +7,7 @@
   gettext,
   gobject-introspection,
   wrapGAppsHook3,
+  writableTmpDirAsHomeHook,
 
   # runtime
   adwaita-icon-theme,
@@ -134,6 +135,7 @@ python3.pkgs.buildPythonApplication rec {
       glibcLocales
       hicolor-icon-theme
       xvfb-run
+      writableTmpDirAsHomeHook
     ]
     ++ (with python3.pkgs; [
       polib
@@ -159,7 +161,6 @@ python3.pkgs.buildPythonApplication rec {
 
   preCheck = ''
     export GDK_PIXBUF_MODULE_FILE=${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
-    export HOME=$(mktemp -d)
     export XDG_DATA_DIRS="$out/share:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_ICON_DIRS:$XDG_DATA_DIRS"
   '';
 
@@ -174,7 +175,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   preFixup = lib.optionalString (kakasi != null) ''
-    gappsWrapperArgs+=(--prefix PATH : ${kakasi}/bin)
+    gappsWrapperArgs+=(--prefix PATH : ${lib.getBin kakasi})
   '';
 
   meta = {
