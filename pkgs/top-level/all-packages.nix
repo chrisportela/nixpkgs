@@ -3017,7 +3017,6 @@ with pkgs;
     garage_0_9_4
 
     garage_1_2_0
-    garage_1_x
     garage_1
 
     garage_2_0_0
