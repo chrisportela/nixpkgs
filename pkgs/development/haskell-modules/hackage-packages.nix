@@ -1607,6 +1607,7 @@ self: {
       maintainers = [
         lib.maintainers.abbradar
         lib.maintainers.iblech
+        lib.maintainers.ncfavier
         lib.maintainers.turion
       ];
     }
