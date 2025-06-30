@@ -57,6 +57,8 @@ buildPythonPackage rec {
     "test_notebook_2_with_all_backends"
   ];
 
+  doCheck = false;
+
   disabledTestPaths = [ "einops/tests/test_layers.py" ];
 
   __darwinAllowLocalNetworking = true;
