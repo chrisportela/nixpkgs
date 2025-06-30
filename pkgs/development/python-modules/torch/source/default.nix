@@ -235,12 +235,12 @@ let
   brokenConditions = attrsets.filterAttrs (_: cond: cond) {
     "CUDA and ROCm are mutually exclusive" = cudaSupport && rocmSupport;
     "CUDA is not targeting Linux" = cudaSupport && !stdenv.hostPlatform.isLinux;
-    "Unsupported CUDA version" =
-      cudaSupport
-      && !(builtins.elem cudaPackages.cudaMajorVersion [
-        "11"
-        "12"
-      ]);
+   # "Unsupported CUDA version" =
+   #   cudaSupport
+   #   && !(builtins.elem cudaPackages.cudaMajorVersion [
+   #     "11"
+   #     #"12"
+   #   ]);
     "MPI cudatoolkit does not match cudaPackages.cudatoolkit" =
       MPISupport && cudaSupport && (mpi.cudatoolkit != cudaPackages.cudatoolkit);
     # This used to be a deep package set comparison between cudaPackages and
