@@ -336,6 +336,7 @@ buildPythonPackage rec {
         nccl
         cudnn
         libcufile
+        setuptools
       ])
     )
     ++ lib.optionals rocmSupport (
