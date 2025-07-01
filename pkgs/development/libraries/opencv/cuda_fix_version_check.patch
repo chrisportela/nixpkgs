@@ -1,0 +1,30 @@
+From 5200419ba5488328604f1366e9294bcc1bab0bc0 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Thu, 13 Feb 2025 23:21:11 +0000
+Subject: [PATCH] cmake/OpenCVDetectCUDAUtils.cmake: use IN_LIST to avoid regex
+ matching valid capabilities
+
+---
+ cmake/OpenCVDetectCUDAUtils.cmake | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/cmake/OpenCVDetectCUDAUtils.cmake b/cmake/OpenCVDetectCUDAUtils.cmake
+index 187740a664a3..040273d6c5a5 100644
+--- a/cmake/OpenCVDetectCUDAUtils.cmake
++++ b/cmake/OpenCVDetectCUDAUtils.cmake
+@@ -310,12 +310,12 @@ macro(ocv_set_cuda_arch_bin_and_ptx nvcc_executable)
+ 
+   # Check if user specified 1.0/2.1 compute capability: we don't support it
+   macro(ocv_wipeout_deprecated_cc target_cc)
+-    if(" ${CUDA_ARCH_BIN} ${CUDA_ARCH_PTX}" MATCHES " ${target_cc}")
++    if(${target_cc} IN_LIST ARCH_BIN_NO_POINTS OR ${target_cc} IN_LIST ARCH_PTX_NO_POINTS)
+       message(SEND_ERROR "CUDA: ${target_cc} compute capability is not supported - exclude it from ARCH/PTX list and re-run CMake")
+     endif()
+   endmacro()
+-  ocv_wipeout_deprecated_cc("1.0")
+-  ocv_wipeout_deprecated_cc("2.1")
++  ocv_wipeout_deprecated_cc("10")
++  ocv_wipeout_deprecated_cc("21")
+ endmacro()
+ 
+ macro(ocv_set_nvcc_threads_for_vs)
