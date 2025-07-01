@@ -303,6 +303,7 @@ effectiveStdenv.mkDerivation {
     ]
     ++ optionals enableCuda [
       ./cuda_opt_flow.patch
+      ./cuda_fix_version_check.patch
     ];
 
   # This prevents cmake from using libraries in impure paths (which
