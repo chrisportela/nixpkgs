@@ -29,20 +29,20 @@
 
 buildPythonPackage {
   pname = "triton";
-  version = "3.1.0";
+  version = "3.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "triton-lang";
     repo = "triton";
     # latest branch commit from https://github.com/triton-lang/triton/commits/release/3.1.x/
-    rev = "cf34004b8a67d290a962da166f5aa2fc66751326";
-    hash = "sha256-233fpuR7XXOaSKN+slhJbE/CMFzAqCRCE4V4rIoJZrk=";
+    rev = "d654e0f2d91f07496454e0fcbec2a9b97df37d47";
+    hash = "sha256-XLw7s5K0j4mfIvNMumlHkUpklSzVSTRyfGazZ4lLpn0=";
   };
 
   patches =
     [
-      ./0001-setup.py-introduce-TRITON_OFFLINE_BUILD.patch
+      # ./0001-setup.py-introduce-TRITON_OFFLINE_BUILD.patch
       (replaceVars ./0001-_build-allow-extra-cc-flags.patch {
         ccCmdExtraFlags = "-Wl,-rpath,${addDriverRunpath.driverLink}/lib";
       })
@@ -65,15 +65,15 @@ buildPythonPackage {
     # Use our `cmakeFlags` instead and avoid downloading dependencies
     # remove any downloads
     substituteInPlace python/setup.py \
-      --replace-fail "get_json_package_info(), get_pybind11_package_info()" ""\
-      --replace-fail "get_pybind11_package_info(), get_llvm_package_info()" ""\
-      --replace-fail 'packages += ["triton/profiler"]' ""\
-      --replace-fail "curr_version != version" "False"
+      --replace-fail "[get_json_package_info()]" "[]"\
+      --replace-fail "[get_llvm_package_info()]" "[]"\
+      --replace-fail 'packages += ["triton/profiler"]' "pass"\
+      --replace-fail "curr_version.group(1) != version" "False"
 
     # Don't fetch googletest
-    substituteInPlace unittest/CMakeLists.txt \
-      --replace-fail "include (\''${CMAKE_CURRENT_SOURCE_DIR}/googletest.cmake)" ""\
-      --replace-fail "include(GoogleTest)" "find_package(GTest REQUIRED)"
+    # substituteInPlace unittest/CMakeLists.txt \
+    #   --replace-fail "include (\''${CMAKE_CURRENT_SOURCE_DIR}/googletest.cmake)" ""\
+    #   --replace-fail "include(GoogleTest)" "find_package(GTest REQUIRED)"
 
     # Patch the source code to make sure it doesn't specify a non-existent PTXAS version.
     # CUDA 12.6 (the current default/max) tops out at PTXAS version 8.5.
