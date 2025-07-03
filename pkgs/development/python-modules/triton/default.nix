@@ -79,10 +79,10 @@ buildPythonPackage {
     # CUDA 12.6 (the current default/max) tops out at PTXAS version 8.5.
     # NOTE: This is fixed in `master`:
     # https://github.com/triton-lang/triton/commit/f48dbc1b106c93144c198fbf3c4f30b2aab9d242
-    substituteInPlace "$NIX_BUILD_TOP/$sourceRoot/third_party/nvidia/backend/compiler.py" \
-      --replace-fail \
-        'return 80 + minor' \
-        'return 80 + min(minor, 5)'
+    # substituteInPlace "$NIX_BUILD_TOP/$sourceRoot/third_party/nvidia/backend/compiler.py" \
+    #   --replace-fail \
+    #     'return 80 + minor' \
+    #     'return 80 + min(minor, 5)'
   '';
 
   build-system = [ setuptools ];
